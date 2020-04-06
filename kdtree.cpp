@@ -1,5 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
+#include <cstdio>
+#include <cstdlib>
 #define DIMENSIONS 2
 using namespace std;
 
@@ -52,14 +55,15 @@ public:
       cout <<"To Right Node"<< endl;
       getRightNode()->print();
     }
+    cout <<"To Upper Node"<< endl;
   }
 
 };
 
-void insertNode(Node* root,vector<int>& newCoordinates,int dimension){
+void insertNode(Node* root,vector<int>& newCoordinates,int dimension = 0){
   if(dimension == DIMENSIONS){dimension = 0;}
   int axisCoordinate = root->getCoordinate(dimension);
-  if(axisCoordinate < newCoordinates[dimension]){
+  if(axisCoordinate > newCoordinates[dimension]){
     if(root->hasLeftNode()){
       insertNode(root->getLeftNode(),newCoordinates,dimension+1);
     }
@@ -68,7 +72,7 @@ void insertNode(Node* root,vector<int>& newCoordinates,int dimension){
       root->assignLeftNode(newNode);
     }
   }
-  else if(axisCoordinate > newCoordinates[dimension] || axisCoordinate == newCoordinates[dimension]){
+  else if(axisCoordinate <= newCoordinates[dimension]){
     if(root->hasRightNode()){
       insertNode(root->getRightNode(),newCoordinates,dimension+1);
     }
@@ -85,12 +89,16 @@ Node* createTree(vector<int>& point){
 }
 
 int main(int argc, char const *argv[]) {
-  vector<int> rootCoordinates {20,3,1,3};
-  vector<int> otherCoordinates {10,2,4,2};
-  vector<int> otherCoordinates2 {25,1,3,2};
+  srand(time(NULL));
+  vector<int> rootCoordinates {20,3};
+  vector<int> otherCoordinates;
   Node* root = createTree(rootCoordinates);
-  insertNode(root,otherCoordinates,0);
-  insertNode(root,otherCoordinates2,0);
+  for(int i = 0; i < 10; i++){
+    otherCoordinates.push_back(rand()%25);
+    otherCoordinates.push_back(rand()%25);
+    insertNode(root,otherCoordinates);
+    otherCoordinates.clear();
+  }
   root->print();
   return 0;
 }
