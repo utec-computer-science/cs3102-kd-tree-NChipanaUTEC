@@ -104,6 +104,40 @@ public:
     }
   }
 
+  bool search(axisCoordinate& searchCoordinate){
+    return searchRecursively(root,searchCoordinate);
+  }
+
+  bool searchRecursively(Node* currentNode,axisCoordinate& searchCoordinate, T dimension = 0){
+    // If the current dimension is the highest dimension possible, then reset.
+    if(dimension == DIMENSIONS){dimension = 0;}
+    // Compare the current Node coordinates with the search coordinates
+    if(currentNode->coordinates==searchCoordinate){return true;}
+    // Get the coordinate in the position of the current dimension of the current Node.
+    T point = currentNode->getPoint(dimension);
+    // If/Else that determines if its higher or lower than the current Node.
+    if(searchCoordinate[dimension] < point){
+      if(currentNode->left){
+        // Calls this function again with the next Node and a higher dimension.
+        searchRecursively(currentNode->left,searchCoordinate, dimension+1);
+      }
+      else{
+        // Compares the search with the current Node.
+        return currentNode->coordinates==searchCoordinate;
+      }
+    }
+    else if(searchCoordinate[dimension] >= point){
+      if(currentNode->right){
+        // Calls this function again with the next Node and a higher dimension.
+        searchRecursively(currentNode->right,searchCoordinate, dimension+1);
+      }
+      else{
+        // Creates and assigns new Node
+        return currentNode->coordinates==searchCoordinate;
+      }
+    }
+  }
+
   // Adds a determined amount of nodes with a random value with another determined threshold.
   void addRandomNodes(T amountNodes,T limit = 25){
     srand(time(NULL));
