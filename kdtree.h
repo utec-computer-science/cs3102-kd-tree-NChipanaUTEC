@@ -14,13 +14,16 @@ class KDTree{
     Node* left;
     Node* right;
 
+    // Node constructors for two different cases.
     Node():left(NULL),right(NULL){}
-    Node (axisCoordinate newCoordinates):coordinates(newCoordinates),left(NULL),right(NULL){}
+    Node(axisCoordinate newCoordinates):coordinates(newCoordinates),left(NULL),right(NULL){}
 
+    // Return the point in the Node's coordinates in the dimension given.
     T getPoint(T dimension){
       return coordinates[dimension];
     }
 
+    // Prints every point in a Node's coordinates.
     void print(){
       for(int i = 0; i < coordinates.size(); i++){
         cout << coordinates[i]<<" ";
@@ -28,6 +31,7 @@ class KDTree{
       cout <<"\n";
     }
 
+    // Prints the tree recursively
     void printTree(){
       print();
       if(this->left){
